@@ -13,6 +13,24 @@ class ChannelsView(TemplateView):
         return kwargs
 
 
+class ShowsView(TemplateView):
+    template_name = 'smart/shows.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(ShowsView, self).get_context_data(**kwargs)
+        kwargs['object_list'] = APIClient(**settings.API_CLIENT).get_shows()
+        return kwargs
+
+
+class ClipsView(TemplateView):
+    template_name = 'smart/clips.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(ClipsView, self).get_context_data(**kwargs)
+        kwargs['object_list'] = APIClient(**settings.API_CLIENT).get_clips()
+        return kwargs
+
+
 class EPGView(TemplateView):
     template_name = 'smart/epg.html'
 
@@ -27,7 +45,8 @@ class WatchView(TemplateView):
 
     def get_context_data(self, **kwargs):
         kwargs = super(WatchView, self).get_context_data(**kwargs)
-        kwargs['object'] = APIClient(**settings.API_CLIENT).get_watch(self.kwargs['slug'])
+        kwargs['object'] = APIClient(**settings.API_CLIENT).get_stream_url(
+            self.kwargs['content_type'], self.kwargs['slug'])
         return kwargs
 
 

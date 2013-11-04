@@ -10,7 +10,7 @@ setup(
     packages = find_packages(),
     dependency_links = [],
     install_requires = [
-        'requests>=2.0.0'
+        'hammock==0.2.4'
     ],
     include_package_data=True,
     zip_safe=False,
