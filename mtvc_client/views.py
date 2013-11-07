@@ -46,7 +46,8 @@ class WatchView(TemplateView):
     def get_context_data(self, **kwargs):
         kwargs = super(WatchView, self).get_context_data(**kwargs)
         kwargs['object'] = APIClient(**settings.API_CLIENT).get_stream_url(
-            self.kwargs['content_type'], self.kwargs['slug'])
+            self.kwargs['content_type'], self.kwargs['slug'], 
+            self.request.META.get('HTTP_USER_AGENT', None))
         return kwargs
 
 
