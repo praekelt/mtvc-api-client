@@ -3,7 +3,7 @@ import hammock
 
 class APIClientException(Exception):
     """
-    Exception class that contains the error code and message from 
+    Exception class that contains the error code and message from
     the MTVC
     """
 
@@ -33,20 +33,23 @@ class APIClient(object):
                 raise APIClientException(error_message=str(e))
             except:
                 raise APIClientException()
-        
+
         return response.json()
 
     def get_channels(self):
         return self.from_json_response(
-            self.api.channel.GET(params={'offering': self.offering_id}))['objects']
+            self.api.channel.GET(params={'offering': self.offering_id}))[
+                'objects']
 
     def get_shows(self):
         return self.from_json_response(
-            self.api.show.GET(params={'offering': self.offering_id}))['objects']
+            self.api.show.GET(params={'offering': self.offering_id}))[
+                'objects']
 
     def get_clips(self):
         return self.from_json_response(
-            self.api.clip.GET(params={'offering': self.offering_id}))['objects']
+            self.api.clip.GET(params={'offering': self.offering_id}))[
+                'objects']
 
     def get_epg(self, channel_id):
         return self.from_json_response(
@@ -60,4 +63,3 @@ class APIClient(object):
 
     def get_account_info(self, msisdn):
         return self.from_json_response(self.api.subscriber(msisdn).GET())
-
