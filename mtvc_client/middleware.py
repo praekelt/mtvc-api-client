@@ -9,11 +9,13 @@ from mtvc_client.client import APIClientException
 
 
 class APIClientExceptionMiddleware(object):
-    
+
     def process_exception(self, request, exception):
         if isinstance(exception, APIClientException):
             if exception.error_code == 'HANDSET_NOT_SUPPORTED':
-                return render_to_response('smart/device_block.html', context_instance=RequestContext(request))
+                return render_to_response(
+                    'smart/device_block.html',
+                    context_instance=RequestContext(request))
 
         return None
 
@@ -27,7 +29,8 @@ class BasicAuthMiddleware(object):
     """
 
     def get_rfa_response(self):
-        response = HttpResponse('<html><title>Authentication required</title><body>' \
+        response = HttpResponse(
+            '<html><title>Authentication required</title><body>'
             '<h1>Authentication Required</h1></body></html>', status=401)
         response['WWW-Authenticate'] = 'Basic realm="Restricted"'
         return response
@@ -45,7 +48,8 @@ class BasicAuthMiddleware(object):
 
         # decode the BA data
         try:
-            username, password = base64.b64decode(data).decode('utf-8').split(':', 1)
+            username, password = base64.b64decode(data).decode('utf-8').split(
+                ':', 1)
         except (TypeError, ValueError):
             return self.get_rfa_response()
 
@@ -54,4 +58,3 @@ class BasicAuthMiddleware(object):
             return self.get_rfa_response()
 
         return None
-
