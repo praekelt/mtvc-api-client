@@ -36,7 +36,8 @@ class EPGView(TemplateView):
 
     def get_context_data(self, **kwargs):
         kwargs = super(EPGView, self).get_context_data(**kwargs)
-        kwargs['object'] = APIClient(**settings.API_CLIENT).get_epg(self.kwargs['slug'])
+        kwargs['object'] = APIClient(**settings.API_CLIENT).get_epg(
+            self.kwargs['slug'])
         return kwargs
 
 
@@ -46,7 +47,7 @@ class WatchView(TemplateView):
     def get_context_data(self, **kwargs):
         kwargs = super(WatchView, self).get_context_data(**kwargs)
         kwargs['object'] = APIClient(**settings.API_CLIENT).get_stream_url(
-            self.kwargs['content_type'], self.kwargs['slug'], 
+            self.kwargs['content_type'], self.kwargs['slug'],
             self.request.META.get('HTTP_USER_AGENT', None))
         return kwargs
 
@@ -63,4 +64,3 @@ class AccountView(TemplateView):
         kwargs['object'] = APIClient(**settings.API_CLIENT).get_account_info(
             self.request.META.get('HTTP_X_MSISDN', None))
         return kwargs
-
