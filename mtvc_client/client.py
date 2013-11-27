@@ -1,6 +1,7 @@
 import logging
 
 import hammock
+from requests.auth import AuthBase
 
 
 logger = logging.getLogger(__name__)
@@ -20,11 +21,27 @@ class APIClientException(Exception):
         return '[%(error_code)s] %(error_message)s' % (self.__dict__)
 
 
+class APIClientAuthentication(AuthBase):
+    """
+    Attaches Tastypie-style HTTP ApiKey Authentication to the given
+    Request object.
+    """
+    def __init__(self, username, key):
+        self.username = username
+        self.key = key
+
+    def __call__(self, r):
+        r.headers['Authorization'] = 'ApiKey %s:%s' % (self.username, self.key)
+        return r
+
+
 class APIClient(object):
 
-    def __init__(self, offering_id, host, port=80, version='v1'):
+    def __init__(self, offering_id, host, username, key, port=80,
+                 version='v1'):
         self.api = hammock.Hammock(
             'http://%s:%s/api/%s' % (host, port, version),
+            auth=APIClientAuthentication(username, key),
             append_slash=True)
         self.offering_id = offering_id
 
