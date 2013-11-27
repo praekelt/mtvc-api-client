@@ -1,4 +1,9 @@
+import logging
+
 import hammock
+
+
+logger = logging.getLogger(__name__)
 
 
 class APIClientException(Exception):
@@ -28,11 +33,26 @@ class APIClient(object):
             try:
                 raise APIClientException(**response.json())
             except APIClientException:
+                # the server returned error details in a JSON response
+                # so we have error_code and error_message set - reraise
                 raise
+            except ValueError, e:
+                # we'd get ValueError if the server did not return JSON
+                # response, so use the response reason for error message
+                # instead
+                raise APIClientException(
+                    error_code=response.status_code,
+                    error_message=response.reason)
             except Exception, e:
-                raise APIClientException(error_message=str(e))
+                logger.exception(e)
+                raise APIClientException(
+                    error_code=response.status_code,
+                    error_message='%s: %s' % (response.reason, e))
             except:
-                raise APIClientException()
+                logger.exception('Unknown error')
+                raise APIClientException(
+                    error_code=response.status_code,
+                    error_message=response.reason)
 
         return response.json()
 
