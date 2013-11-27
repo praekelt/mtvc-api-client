@@ -2,7 +2,7 @@ import base64
 
 from django.http import HttpResponse
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.conf import settings
 
 from mtvc_client.client import APIClientException
@@ -13,9 +13,16 @@ class APIClientExceptionMiddleware(object):
     def process_exception(self, request, exception):
         if isinstance(exception, APIClientException):
             if exception.error_code == 'HANDSET_NOT_SUPPORTED':
-                return render_to_response(
-                    'smart/device_block.html',
-                    context_instance=RequestContext(request))
+                return render(
+                    request, 'smart/device_block.html',
+                    context_instance=RequestContext(request),
+                    status=412)
+
+            return render(
+                request, 'smart/500.html', {
+                    'error_code': exception.error_code,
+                    'error_message': exception.error_message,
+                }, context_instance=RequestContext(request), status=500)
 
         return None
 
