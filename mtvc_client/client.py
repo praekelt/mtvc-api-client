@@ -75,17 +75,17 @@ class APIClient(object):
 
     def get_channels(self):
         return self.from_json_response(
-            self.api.channel.GET(params={'offering': self.offering_id}))[
+            self.api.channel.GET(params={'offering__slug': self.offering_id}))[
                 'objects']
 
     def get_shows(self):
         return self.from_json_response(
-            self.api.show.GET(params={'offering': self.offering_id}))[
+            self.api.show.GET(params={'offering__slug': self.offering_id}))[
                 'objects']
 
     def get_clips(self):
         return self.from_json_response(
-            self.api.clip.GET(params={'offering': self.offering_id}))[
+            self.api.clip.GET(params={'offering__slug': self.offering_id}))[
                 'objects']
 
     def get_epg(self, channel_id):
@@ -95,7 +95,7 @@ class APIClient(object):
     def get_stream_url(self, content_type, content_id, user_agent):
         return self.from_json_response(
             self.api(content_type)(content_id).play.GET(
-                params={'offering': self.offering_id},
+                params={'offering__slug': self.offering_id},
                 headers={'User-Agent': user_agent}))
 
     def get_account_info(self, msisdn):
