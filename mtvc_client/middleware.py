@@ -29,7 +29,10 @@ class APIClientExceptionMiddleware(object):
 
 class BasicAuthMiddleware(object):
     """
-    Middleware for HTTP Basic Authentication.
+    Use this Middleware to password-protect a portal using HTTP Basic
+    Authentication with creds stored in a settings file.
+
+    This is useful for eg. locking down a QA site pre-launch.
 
     Requires BASIC_AUTH_CREDS in Django settings which should be a
     dict with passwords keyed by username.
