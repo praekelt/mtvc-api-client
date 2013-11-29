@@ -2,6 +2,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 
 from client import APIClient
+from utils import get_request_msisdn, get_request_ip
 
 
 class ChannelsView(TemplateView):
@@ -48,7 +49,9 @@ class WatchView(TemplateView):
         kwargs = super(WatchView, self).get_context_data(**kwargs)
         kwargs['object'] = APIClient(**settings.API_CLIENT).get_stream_url(
             self.kwargs['content_type'], self.kwargs['slug'],
-            self.request.META.get('HTTP_USER_AGENT', None))
+            self.request.META.get('HTTP_USER_AGENT', ''),
+            msisdn=get_request_msisdn(self.request),
+            client_ip=get_request_ip(self.request))
         return kwargs
 
 
@@ -62,5 +65,6 @@ class AccountView(TemplateView):
     def get_context_data(self, **kwargs):
         kwargs = super(AccountView, self).get_context_data(**kwargs)
         kwargs['object'] = APIClient(**settings.API_CLIENT).get_account_info(
-            self.request.META.get('HTTP_X_MSISDN', None))
+            msisdn=get_request_msisdn(self.request),
+            client_ip=get_request_ip(self.request))
         return kwargs

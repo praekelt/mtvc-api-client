@@ -92,11 +92,16 @@ class APIClient(object):
         return self.from_json_response(
             self.api.channel(channel_id).GET(params={'days': 1}))
 
-    def get_stream_url(self, content_type, content_id, user_agent):
+    def get_stream_url(
+            self, content_type, content_id, user_agent, msisdn, client_ip):
         return self.from_json_response(
             self.api(content_type)(content_id).play.GET(
                 params={'offering__slug': self.offering_id},
-                headers={'User-Agent': user_agent}))
+                headers={
+                    'User-Agent': user_agent,
+                    'X-MSISDN': msisdn,
+                    'X-FORWARDED-FOR': client_ip,
+                }))
 
-    def get_account_info(self, msisdn):
+    def get_account_info(self, msisdn, client_ip):
         return self.from_json_response(self.api.subscriber(msisdn).GET())
