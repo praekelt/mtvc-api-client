@@ -71,7 +71,12 @@ class APIClient(object):
                     error_code=response.status_code,
                     error_message=response.reason)
 
-        return response.json()
+        try:
+            return response.json()
+        except ValueError, e:
+            # we'd get ValueError if the server did not return JSON
+            # response, so just return {}
+            return {}
 
     def get_channels(self):
         return self.from_json_response(
@@ -105,3 +110,31 @@ class APIClient(object):
 
     def get_account_info(self, msisdn, client_ip):
         return self.from_json_response(self.api.subscriber(msisdn).GET())
+
+    def get_profile_schema(self):
+        return self.from_json_response(self.api.subscriberprofile.schema.GET(
+            params={'offering__slug': self.offering_id}))
+
+    def post_profile(self, msisdn, client_ip, data):
+        return self.from_json_response(self.api.subscriberprofile.POST(
+            headers={
+                'X-MSISDN': msisdn,
+                'X-FORWARDED-FOR': client_ip,
+                'Content-Type': 'application/json'},
+            params={'offering__slug': self.offering_id},
+            data=data))
+
+    def get_transaction_schema(self):
+        return self.from_json_response(
+            self.api.subscribertransaction.schema.GET(
+                params={'offering__slug': self.offering_id}))
+
+    def post_transaction(self, user_agent, msisdn, client_ip, data):
+        return self.from_json_response(self.api.subscribertransaction.POST(
+            headers={
+                'User-Agent': user_agent,
+                'X-MSISDN': msisdn,
+                'X-FORWARDED-FOR': client_ip,
+                'Content-Type': 'application/json'},
+            params={'offering__slug': self.offering_id},
+            data=data))
