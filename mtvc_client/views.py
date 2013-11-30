@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 
 from client import APIClient
-from utils import get_request_msisdn, get_request_ip
+from utils import get_request_msisdn, get_request_ip, get_request_user_agent
+from forms import ProfileForm, ProductForm
 
 
 class ChannelsView(TemplateView):
@@ -49,7 +51,7 @@ class WatchView(TemplateView):
         kwargs = super(WatchView, self).get_context_data(**kwargs)
         kwargs['object'] = APIClient(**settings.API_CLIENT).get_stream_url(
             self.kwargs['content_type'], self.kwargs['slug'],
-            self.request.META.get('HTTP_USER_AGENT', ''),
+            user_agent=get_request_user_agent(self.request),
             msisdn=get_request_msisdn(self.request),
             client_ip=get_request_ip(self.request))
         return kwargs
@@ -57,6 +59,33 @@ class WatchView(TemplateView):
 
 class HelpView(TemplateView):
     template_name = 'smart/help.html'
+
+
+class ProfileView(FormView):
+    template_name = 'smart/profile_form.html'
+    form_class = ProfileForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        APIClient(**settings.API_CLIENT).post_profile(
+            msisdn=get_request_msisdn(self.request),
+            client_ip=get_request_ip(self.request),
+            data=form.get_json_data())
+        return super(ProfileView, self).form_valid(form)
+
+
+class ProductView(FormView):
+    template_name = 'smart/product_form.html'
+    form_class = ProductForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        APIClient(**settings.API_CLIENT).post_transaction(
+            user_agent=get_request_user_agent(self.request),
+            msisdn=get_request_msisdn(self.request),
+            client_ip=get_request_ip(self.request),
+            data=form.get_json_data())
+        return super(ProductView, self).form_valid(form)
 
 
 class AccountView(TemplateView):
