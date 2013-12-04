@@ -9,15 +9,13 @@ from mtvc_client.client import APIClientException
 
 
 class APIClientExceptionMiddleware(object):
+    """
+    A middleware class that adds additional context information when
+    APIClientExceptions are raised by the application
+    """
 
     def process_exception(self, request, exception):
         if isinstance(exception, APIClientException):
-            if exception.error_code == 'HANDSET_NOT_SUPPORTED':
-                return render(
-                    request, 'smart/device_block.html',
-                    context_instance=RequestContext(request),
-                    status=412)
-
             return render(
                 request, 'smart/500.html', {
                     'error_code': exception.error_code,
