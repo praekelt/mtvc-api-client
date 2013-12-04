@@ -47,35 +47,28 @@ class APIClient(object):
 
     def from_json_response(self, response):
         if response.status_code < 200 or response.status_code >= 300:
+            error_context = {
+                'status_code': response.status_code,
+                'status_reason': response.reason,
+                'error_code': response.status_code,
+                'error_message': response.reason,
+                'content': response.content,
+            }
+
             try:
-                raise APIClientException(**response.json())
-            except APIClientException:
-                # the server returned error details in a JSON response
-                # so we have error_code and error_message set - reraise
-                raise
-            except ValueError, e:
-                # we'd get ValueError if the server did not return JSON
-                # response, so use the response reason for error message
-                # instead
-                raise APIClientException(
-                    error_code=response.status_code,
-                    error_message=response.reason)
-            except Exception, e:
-                logger.exception(e)
-                raise APIClientException(
-                    error_code=response.status_code,
-                    error_message='%s: %s' % (response.reason, e))
-            except:
-                logger.exception('Unknown error')
-                raise APIClientException(
-                    error_code=response.status_code,
-                    error_message=response.reason)
+                error_context.update(response.json())
+            except ValueError:
+                pass
+
+            logger.error('MTVC Server error %s: %s' % (
+                response.status_code, error_context))
+
+            raise APIClientException(**error_context)
 
         try:
             return response.json()
         except ValueError, e:
-            # we'd get ValueError if the server did not return JSON
-            # response, so just return {}
+            # the server did not return JSON, so just return {}
             return {}
 
     def get_channels(self):
