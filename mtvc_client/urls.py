@@ -14,4 +14,7 @@ urlpatterns = patterns(
         views.WatchView.as_view(), name='watch'),
     url(r'^help/$', views.HelpView.as_view(), name='help'),
     url(r'^account/$', views.AccountView.as_view(), name='account'),
+    url(r'^profile/$', views.ProfileView.as_view(), name='profile'),
+    url(r'^product/$', views.ProductView.as_view(), name='product'),
+    url(r'^handset-not-supported/$', views.HandsetNotSupportedView.as_view(), name='handset-not-supported'),
 )

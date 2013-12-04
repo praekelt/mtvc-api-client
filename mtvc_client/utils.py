@@ -61,4 +61,4 @@ def get_region_choices():
 
 def get_product_choices():
     schema = get_transaction_schema_cached()
-    return schema['fields']['product']['choices']
+    return schema['fields']['product_name']['choices']

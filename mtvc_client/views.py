@@ -1,13 +1,22 @@
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
+from django.utils.decorators import method_decorator
 
 from client import APIClient
 from utils import get_request_msisdn, get_request_ip, get_request_user_agent
 from forms import ProfileForm, ProductForm
+from decorators import view_exception_handler
 
 
-class ChannelsView(TemplateView):
+class TemplateViewBase(TemplateView):
+
+    @method_decorator(view_exception_handler)
+    def dispatch(self, *args, **kwargs):
+        return super(TemplateViewBase, self).dispatch(*args, **kwargs)
+
+
+class ChannelsView(TemplateViewBase):
     template_name = 'smart/channels.html'
 
     def get_context_data(self, **kwargs):
@@ -16,7 +25,7 @@ class ChannelsView(TemplateView):
         return kwargs
 
 
-class ShowsView(TemplateView):
+class ShowsView(TemplateViewBase):
     template_name = 'smart/shows.html'
 
     def get_context_data(self, **kwargs):
@@ -25,7 +34,7 @@ class ShowsView(TemplateView):
         return kwargs
 
 
-class ClipsView(TemplateView):
+class ClipsView(TemplateViewBase):
     template_name = 'smart/clips.html'
 
     def get_context_data(self, **kwargs):
@@ -34,7 +43,7 @@ class ClipsView(TemplateView):
         return kwargs
 
 
-class EPGView(TemplateView):
+class EPGView(TemplateViewBase):
     template_name = 'smart/epg.html'
 
     def get_context_data(self, **kwargs):
@@ -44,7 +53,7 @@ class EPGView(TemplateView):
         return kwargs
 
 
-class WatchView(TemplateView):
+class WatchView(TemplateViewBase):
     template_name = 'smart/watch.html'
 
     def get_context_data(self, **kwargs):
@@ -57,8 +66,17 @@ class WatchView(TemplateView):
         return kwargs
 
 
-class HelpView(TemplateView):
+class HelpView(TemplateViewBase):
     template_name = 'smart/help.html'
+
+
+class HandsetNotSupportedView(TemplateViewBase):
+    template_name = 'smart/handset_not_supported.html'
+
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs['status'] = 412
+        return super(HandsetNotSupportedView, self).render_to_response(
+            context, **response_kwargs)
 
 
 class ProfileView(FormView):
@@ -88,7 +106,7 @@ class ProductView(FormView):
         return super(ProductView, self).form_valid(form)
 
 
-class AccountView(TemplateView):
+class AccountView(TemplateViewBase):
     template_name = 'smart/account.html'
 
     def get_context_data(self, **kwargs):
