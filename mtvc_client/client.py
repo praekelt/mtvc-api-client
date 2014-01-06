@@ -67,7 +67,7 @@ class APIClient(object):
 
         try:
             return response.json()
-        except ValueError, e:
+        except ValueError:
             # the server did not return JSON, so just return {}
             return {}
 
@@ -85,6 +85,11 @@ class APIClient(object):
         return self.from_json_response(
             self.api.clip.GET(params={'offering__slug': self.offering_id}))[
                 'objects']
+
+    def get_clip(self, clip_id):
+        return self.from_json_response(
+            self.api.clip(clip_id).GET(
+                params={'offering__slug': self.offering_id}))
 
     def get_epg(self, channel_id):
         return self.from_json_response(
