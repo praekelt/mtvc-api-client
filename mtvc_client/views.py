@@ -17,7 +17,7 @@ class TemplateViewBase(TemplateView):
 
 
 class ChannelsView(TemplateViewBase):
-    template_name = 'smart/channels.html'
+    template_name = 'channels.html'
 
     def get_context_data(self, **kwargs):
         kwargs = super(ChannelsView, self).get_context_data(**kwargs)
@@ -26,7 +26,7 @@ class ChannelsView(TemplateViewBase):
 
 
 class ShowsView(TemplateViewBase):
-    template_name = 'smart/shows.html'
+    template_name = 'shows.html'
 
     def get_context_data(self, **kwargs):
         kwargs = super(ShowsView, self).get_context_data(**kwargs)
@@ -35,7 +35,7 @@ class ShowsView(TemplateViewBase):
 
 
 class ClipsView(TemplateViewBase):
-    template_name = 'smart/clips.html'
+    template_name = 'clips.html'
 
     def get_context_data(self, **kwargs):
         kwargs = super(ClipsView, self).get_context_data(**kwargs)
@@ -44,7 +44,7 @@ class ClipsView(TemplateViewBase):
 
 
 class EPGView(TemplateViewBase):
-    template_name = 'smart/epg.html'
+    template_name = 'epg.html'
 
     def get_context_data(self, **kwargs):
         kwargs = super(EPGView, self).get_context_data(**kwargs)
@@ -54,7 +54,7 @@ class EPGView(TemplateViewBase):
 
 
 class WatchView(TemplateViewBase):
-    template_name = 'smart/watch.html'
+    template_name = 'watch.html'
 
     def get_context_data(self, **kwargs):
         kwargs = super(WatchView, self).get_context_data(**kwargs)
@@ -67,11 +67,11 @@ class WatchView(TemplateViewBase):
 
 
 class HelpView(TemplateViewBase):
-    template_name = 'smart/help.html'
+    template_name = 'help.html'
 
 
 class HandsetNotSupportedView(TemplateViewBase):
-    template_name = 'smart/handset_not_supported.html'
+    template_name = 'handset_not_supported.html'
 
     def render_to_response(self, context, **response_kwargs):
         response_kwargs['status'] = 412
@@ -80,7 +80,7 @@ class HandsetNotSupportedView(TemplateViewBase):
 
 
 class ProfileView(FormView):
-    template_name = 'smart/profile_form.html'
+    template_name = 'profile_form.html'
     form_class = ProfileForm
     success_url = '/'
 
@@ -93,7 +93,7 @@ class ProfileView(FormView):
 
 
 class ProductView(FormView):
-    template_name = 'smart/product_form.html'
+    template_name = 'product_form.html'
     form_class = ProductForm
     success_url = '/'
 
@@ -107,7 +107,7 @@ class ProductView(FormView):
 
 
 class AccountView(TemplateViewBase):
-    template_name = 'smart/account.html'
+    template_name = 'account.html'
 
     def get_context_data(self, **kwargs):
         kwargs = super(AccountView, self).get_context_data(**kwargs)
