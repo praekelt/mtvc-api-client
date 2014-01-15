@@ -62,6 +62,7 @@ class BasicAuthMiddleware(object):
             return self.get_rfa_response()
 
         if not hasattr(settings, 'BASIC_AUTH_CREDS') or \
+                username not in settings.BASIC_AUTH_CREDS or \
                 settings.BASIC_AUTH_CREDS[username] != password:
             return self.get_rfa_response()
 
