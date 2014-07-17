@@ -71,6 +71,9 @@ class APIClient(object):
             # the server did not return JSON, so just return {}
             return {}
 
+    def get_countries(self):
+        return self.from_json_response(self.api.country.GET()['objects'])
+
     def get_channels(self):
         return self.from_json_response(
             self.api.channel.GET(params={'offering__slug': self.offering_id}))[
