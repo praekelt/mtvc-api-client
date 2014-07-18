@@ -74,29 +74,38 @@ class APIClient(object):
     def get_countries(self):
         return self.from_json_response(self.api.country.GET()['objects'])
 
-    def get_channels(self):
+    def get_channels(self, **kwargs):
+        params = {'offering__slug': self.offering_id}
+        params.update(kwargs)
         return self.from_json_response(
-            self.api.channel.GET(params={'offering__slug': self.offering_id}))[
+            self.api.channel.GET(params=params))[
                 'objects']
 
-    def get_shows(self):
+    def get_shows(self, **kwargs):
+        params = {'offering__slug': self.offering_id}
+        params.update(kwargs)
         return self.from_json_response(
-            self.api.show.GET(params={'offering__slug': self.offering_id}))[
+            self.api.show.GET(params=params))[
                 'objects']
 
-    def get_clips(self):
+    def get_clips(self, **kwargs):
+        params = {'offering__slug': self.offering_id}
+        params.update(kwargs)
         return self.from_json_response(
-            self.api.clip.GET(params={'offering__slug': self.offering_id}))[
+            self.api.clip.GET(params=params))[
                 'objects']
 
-    def get_clip(self, clip_id):
+    def get_clip(self, clip_id, **kwargs):
+        params = {'offering__slug': self.offering_id}
+        params.update(kwargs)
         return self.from_json_response(
-            self.api.clip(clip_id).GET(
-                params={'offering__slug': self.offering_id}))
+            self.api.clip(clip_id).GET(params=params))
 
-    def get_epg(self, channel_id):
+    def get_epg(self, channel_id, **kwargs):
+        params = {'days': 1}
+        params.update(kwargs)
         return self.from_json_response(
-            self.api.channel(channel_id).GET(params={'days': 1}))
+            self.api.channel(channel_id).GET(params=params))
 
     def get_stream_url(
             self, content_type, content_id, user_agent, msisdn, client_ip):
