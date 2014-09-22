@@ -88,6 +88,13 @@ class APIClient(object):
             self.api.show.GET(params=params))[
                 'objects']
 
+    def get_showchannels(self, **kwargs):
+        params = {'offering__slug': self.offering_id}
+        params.update(kwargs)
+        return self.from_json_response(
+            self.api.showchannel.GET(params=params))[
+                'objects']
+
     def get_clips(self, **kwargs):
         params = {'offering__slug': self.offering_id}
         params.update(kwargs)
