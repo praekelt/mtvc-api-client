@@ -72,28 +72,25 @@ class APIClient(object):
             return {}
 
     def get_countries(self):
-        return self.from_json_response(self.api.country.GET()['objects'])
+        return self.from_json_response(self.api.country.GET())
 
     def get_channels(self, **kwargs):
         params = {'offering__slug': self.offering_id}
         params.update(kwargs)
         return self.from_json_response(
-            self.api.channel.GET(params=params))[
-                'objects']
+            self.api.channel.GET(params=params))
 
     def get_shows(self, **kwargs):
         params = {'offering__slug': self.offering_id}
         params.update(kwargs)
         return self.from_json_response(
-            self.api.show.GET(params=params))[
-                'objects']
+            self.api.show.GET(params=params))
 
     def get_clips(self, **kwargs):
         params = {'offering__slug': self.offering_id}
         params.update(kwargs)
         return self.from_json_response(
-            self.api.clip.GET(params=params))[
-                'objects']
+            self.api.clip.GET(params=params))
 
     def get_clip(self, clip_id, **kwargs):
         params = {'offering__slug': self.offering_id}
