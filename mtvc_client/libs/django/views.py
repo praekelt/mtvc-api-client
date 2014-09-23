@@ -25,6 +25,8 @@ class ChannelsView(TemplateViewBase):
         page = utils.get_request_page_number(self.request)
         channels = utils.get_channel_list(page)
         results['meta'] = channels['meta']
+        results['paginator'] = utils.get_response_paginator(
+            self.request, channels['meta'])
         results['object_list'] = channels['objects']
         return results
 
@@ -37,6 +39,8 @@ class ShowsView(TemplateViewBase):
         page = utils.get_request_page_number(self.request)
         shows = utils.get_show_list(page)
         results['meta'] = shows['meta']
+        results['paginator'] = utils.get_response_paginator(
+            self.request, shows['meta'])
         results['object_list'] = shows['objects']
         return results
 
@@ -49,6 +53,8 @@ class ClipsView(TemplateViewBase):
         page = utils.get_request_page_number(self.request)
         clips = utils.get_clips_list(page)
         results['meta'] = clips['meta']
+        results['paginator'] = utils.get_response_paginator(
+            self.request, clips['meta'])
         results['object_list'] = clips['objects']
         return results
 
@@ -61,6 +67,8 @@ class ClipsFeaturedView(TemplateViewBase):
         page = utils.get_request_page_number(self.request)
         clips = utils.get_featured_clips(page)
         results['meta'] = clips['meta']
+        results['paginator'] = utils.get_response_paginator(
+            self.request, clips['meta'])
         results['object_list'] = clips['objects']
         return results
 
@@ -73,6 +81,8 @@ class ClipsPopularView(TemplateViewBase):
         page = utils.get_request_page_number(self.request)
         clips = utils.get_popular_clips(page)
         results['meta'] = clips['meta']
+        results['paginator'] = utils.get_response_paginator(
+            self.request, clips['meta'])
         results['object_list'] = clips['objects']
         return results
 
@@ -89,6 +99,8 @@ class ClipsByChannelView(TemplateViewBase):
         page = utils.get_request_page_number(self.request)
         clips = utils.get_clips_by_channel(kwargs['slug'], page)
         results['meta'] = clips['meta']
+        results['paginator'] = utils.get_response_paginator(
+            self.request, clips['meta'])
         results['object_list'] = clips['objects']
         results['show_channel'] = show_channel
         return results

@@ -41,6 +41,28 @@ def get_request_page_number(request):
     return int(request.GET.get('page', 1))
 
 
+def get_response_paginator(request, meta):
+    """
+    Returns a paginator for the response meta-data given the request.
+    """
+    # calculate number of pages
+    pages = meta['total_count'] / meta['limit']
+
+    # add a page for the remainder
+    if meta['total_count'] % meta['limit']:
+        pages += 1
+
+    current_page = (meta['offset'] / meta['limit']) + 1
+
+    return {
+        'pages': [{
+            'current': page == current_page,
+            'index': page,
+            'url': '%s?page=%s' % (request.path_info, page)
+        } for page in range(1, pages + 1)]
+    }
+
+
 def get_cached_api_response(key, timeout, fn, **fn_kwargs):
     """
     Returns an API response from cache, if available, else updates
