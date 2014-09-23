@@ -8,7 +8,7 @@ from django.forms.widgets import RadioFieldRenderer, mark_safe, RadioInput, \
     conditional_escape
 from django.utils.encoding import force_text
 
-import utils
+from mtvc_client.libs.django import utils
 
 
 def validate_year_of_birth(value):
@@ -43,17 +43,20 @@ class RadioFieldParagraphRenderer(RadioFieldRenderer):
 
     def __iter__(self):
         for i, choice in enumerate(self.choices):
-            yield RadioInputNoLabel(self.name, self.value, self.attrs.copy(), choice, i)
+            yield RadioInputNoLabel(
+                self.name, self.value, self.attrs.copy(), choice, i)
 
     def __getitem__(self, idx):
         choice = self.choices[idx]  # let IndexErrors propagate
-        return RadioInputNoLabel(self.name, self.value, self.attrs.copy(), choice, idx)
+        return RadioInputNoLabel(
+            self.name, self.value, self.attrs.copy(), choice, idx)
 
     def render(self):
         """
         Outputs radio fields wrapped in p-tags.
         """
-        return mark_safe(u'\n'.join([u'<p>%s</p>' % force_text(w) for w in self]))
+        return mark_safe(u'\n'.join([
+            u'<p>%s</p>' % force_text(w) for w in self]))
 
 
 class JSONDataForm(forms.Form):
