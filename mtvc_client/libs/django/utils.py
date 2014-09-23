@@ -100,7 +100,8 @@ def get_channel_list(page=1, results_per_page=30, timeout=60):
     Returns a channel list, by default cached for 60 seconds.
     """
     return get_cached_api_response(
-        'CHANNELS', timeout, APIClient(**settings.API_CLIENT).get_channels,
+        'CHANNELS:::%d' % page, timeout,
+        APIClient(**settings.API_CLIENT).get_channels,
         limit=results_per_page, offset=(page - 1) * results_per_page)
 
 
@@ -109,7 +110,8 @@ def get_clips_list(page=1, results_per_page=5, timeout=60 * 5):
     Returns a clips list, by default cached for 5 minutes.
     """
     return get_cached_api_response(
-        'CLIPS', timeout, APIClient(**settings.API_CLIENT).get_clips,
+        'CLIPS:::%d' % page, timeout,
+        APIClient(**settings.API_CLIENT).get_clips,
         limit=results_per_page, offset=(page - 1) * results_per_page)
 
 
@@ -146,7 +148,7 @@ def get_clips_by_channel(slug, page=1, results_per_page=5, timeout=60 * 5):
     Results for the page are cached for 5 minutes by default.
     """
     return get_cached_api_response(
-        'CLIPS:::CHANNEL:::%s' % slug, timeout,
+        'CLIPS:::CHANNEL:::%s:::%d' % (slug, page), timeout,
         APIClient(**settings.API_CLIENT).get_clips,
         show__show_channel__slug__exact=slug, limit=results_per_page,
         offset=(page - 1) * results_per_page)
