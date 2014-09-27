@@ -110,6 +110,12 @@ class APIClient(object):
         return self.from_json_response(
             self.api.channel(channel_id).GET(params=params))
 
+    def get_banners(self, **kwargs):
+        params = {'offering__slug': self.offering_id}
+        params.update(kwargs)
+        return self.from_json_response(
+            self.api.banner.GET(params=params))
+
     def get_stream_url(
             self, content_type, content_id, user_agent, msisdn, client_ip):
         return self.from_json_response(
