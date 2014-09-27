@@ -219,16 +219,29 @@ def get_channel_epgs(slug, timeout=60 * 5):
         APIClient(**settings.API_CLIENT).get_epg, slug=slug)
 
 
-def get_content_type_banners(model, slug, slot, timeout=60 * 5):
+def get_content_type_banners(model, slug=None, slot=None, timeout=60 * 5):
     """
-    Returns a banner list, filtered by content type and content id and
-    cached for 5 minutes by default
+    Returns a banner list, filtered by content type and optionally
+    filtered by content object slug and banner slot slug.
+
+    Results are cached for 5 minutes by default.
     """
+    filters = {'content_type__model': model}
+    key = 'BANNERS:::%s' % model
+
+    if slug or slot:
+        if slug:
+            key = '%s:::%s' % (key, slug)
+            filters['content_object__slug'] = slug
+        else:
+            key = '%s:::###NONE###' % key
+
+        if slot:
+            key = '%s:::%s' % (key, slot)
+            filters['slot__slug'] = slot
+
     return get_cached_api_response(
-        'BANNERS:::%s:::%s:::%s' % (model, slug, slot), timeout,
-        APIClient(**settings.API_CLIENT).get_banners,
-        content_type__model=model, content_object__slug=slug,
-        slot__slug='vlive-thumbnail-promo')
+        key, timeout, APIClient(**settings.API_CLIENT).get_banners, **filters)
 
 
 def get_gender_choices():
