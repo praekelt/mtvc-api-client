@@ -219,29 +219,35 @@ def get_channel_epgs(slug, timeout=60 * 5):
         APIClient(**settings.API_CLIENT).get_epg, slug=slug)
 
 
-def get_content_type_banners(model, slug=None, slot=None, timeout=60 * 5):
+def get_content_type_banners(model=None, slug=None, slot=None, timeout=60 * 5):
     """
-    Returns a banner list, filtered by content type and optionally
-    filtered by content object slug and banner slot slug.
+    Returns a banner list, optionally filtered by content type,
+    content object slug and banner slot slug.
 
     Results are cached for 5 minutes by default.
     """
-    filters = {'content_type__model': model}
-    key = 'BANNERS:::%s' % model
+    filters = {}
+    key = {
+        'model': '__ANY__',
+        'slug': '__ANY__',
+        'slot': '__ANY__',
+    }
 
-    if slug or slot:
-        if slug:
-            key = '%s:::%s' % (key, slug)
-            filters['content_object__slug'] = slug
-        else:
-            key = '%s:::###NONE###' % key
+    if model:
+        key['model'] = model
+        filters['content_type__model'] = model
 
-        if slot:
-            key = '%s:::%s' % (key, slot)
-            filters['slot__slug'] = slot
+    if slug:
+        key['slug'] = slug
+        filters['content_object__slug'] = slug
+
+    if slot:
+        key['slot'] = slot
+        filters['slot__slug'] = slot
 
     return get_cached_api_response(
-        key, timeout, APIClient(**settings.API_CLIENT).get_banners, **filters)
+        '%(model)s:::%(slug)s:::%(slot)s' % key, timeout,
+        APIClient(**settings.API_CLIENT).get_banners, **filters)
 
 
 def get_gender_choices():
