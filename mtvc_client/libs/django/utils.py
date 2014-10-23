@@ -216,7 +216,7 @@ def get_channel_epgs(slug, timeout=60 * 5):
     """
     return get_cached_api_response(
         'CHANNEL-EPG:::%s' % slug, timeout,
-        APIClient(**settings.API_CLIENT).get_epg, slug=slug)
+        APIClient(**settings.API_CLIENT).get_epg, channel_id=slug)
 
 
 def get_content_type_banners(model=None, slug=None, slot=None, timeout=60 * 5):
