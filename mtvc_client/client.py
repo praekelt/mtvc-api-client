@@ -16,6 +16,7 @@ class APIClientException(Exception):
     def __init__(self, error_code=None, error_message=None, **kwargs):
         self.error_code = error_code
         self.error_message = error_message
+        self.__dict__.update(kwargs)
 
     def __str__(self):
         return '[%(error_code)s] %(error_message)s' % (self.__dict__)
