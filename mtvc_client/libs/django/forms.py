@@ -4,8 +4,8 @@ import json
 from django import forms
 from django.utils.functional import lazy
 from django.core.exceptions import ValidationError
-from django.forms.widgets import RadioFieldRenderer, mark_safe, RadioInput, \
-    conditional_escape
+from django.forms.widgets import RadioFieldRenderer, mark_safe, \
+    RadioChoiceInput, conditional_escape
 from django.utils.encoding import force_text
 
 from mtvc_client.libs.django import utils
@@ -22,7 +22,7 @@ def validate_accepted_tc(value):
         raise ValidationError('Terms and Conditions must be accepted')
 
 
-class RadioInputNoLabel(RadioInput):
+class RadioInputNoLabel(RadioChoiceInput):
     """
     An object used by RadioFieldBreakRenderer that represents a single
     <input type='radio'>, but without the label that Django
