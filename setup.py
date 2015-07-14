@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='mtvc-api-client',
-    version='0.0.8',
+    version='0.0.9',
     description='Praekelt MTVC API Client',
     author='Praekelt Consulting',
     author_email='dev@praekelt.com',
