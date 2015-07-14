@@ -154,6 +154,20 @@ def get_clips_by_channel(slug, page=1, results_per_page=5, timeout=60 * 5):
         offset=(page - 1) * results_per_page)
 
 
+def get_clips_by_show(slug, page=1, results_per_page=5, timeout=60 * 5):
+    """
+    Returns a list of the clips, filtered by show slug, for the page
+    number specified.
+
+    Results for the page are cached for 5 minutes by default.
+    """
+    return get_cached_api_response(
+        'CLIPS:::SHOW:::%s:::%d' % (slug, page), timeout,
+        APIClient(**settings.API_CLIENT).get_clips,
+        show__slug__exact=slug, limit=results_per_page,
+        offset=(page - 1) * results_per_page)
+
+
 def get_clip_detail(slug, timeout=60 * 5):
     """
     Looks up and returns a clip by slug.
