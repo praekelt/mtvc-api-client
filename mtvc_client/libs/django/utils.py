@@ -187,12 +187,33 @@ def get_clip_detail(slug, timeout=60 * 5):
         return None
 
 
-def get_shows(timeout=60 * 5):
+def get_shows(channel_slug=None, timeout=60 * 5):
     """
-    Returns a clip show list, cached for 5 minutes by default
+    Returns a clip show list, optionally filtered by channel slug.
+
+    Results are cached for 5 minutes by default
     """
+    if channel_slug:
+        return get_cached_api_response(
+            'SHOWS:::%s' % channel_slug, timeout,
+            APIClient(**settings.API_CLIENT).get_shows,
+            show_channel__slug__exact=channel_slug)
+    else:
     return get_cached_api_response(
         'SHOWS', timeout, APIClient(**settings.API_CLIENT).get_shows)
+def get_show(slug, timeout=60 * 5):
+    """
+    Looks up and returns a clip show by slug, cached for 5 minutes by
+    default
+    """
+    result = get_cached_api_response(
+        'SHOW:::%s' % slug, timeout,
+        APIClient(**settings.API_CLIENT).get_shows, slug__exact=slug)
+
+    if result and 'objects' in result and result['objects']:
+        return result['objects'][0]
+    else:
+        return None
 
 
 def get_showchannels(timeout=60 * 5):
