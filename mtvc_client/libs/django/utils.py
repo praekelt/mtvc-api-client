@@ -199,8 +199,10 @@ def get_shows(channel_slug=None, timeout=60 * 5):
             APIClient(**settings.API_CLIENT).get_shows,
             show_channel__slug__exact=channel_slug)
     else:
-    return get_cached_api_response(
-        'SHOWS', timeout, APIClient(**settings.API_CLIENT).get_shows)
+        return get_cached_api_response(
+            'SHOWS', timeout, APIClient(**settings.API_CLIENT).get_shows)
+
+
 def get_show(slug, timeout=60 * 5):
     """
     Looks up and returns a clip show by slug, cached for 5 minutes by
