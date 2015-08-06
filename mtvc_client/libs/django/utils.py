@@ -206,10 +206,12 @@ def get_shows(channel_slug=None, timeout=60 * 5):
         return get_cached_api_response(
             'SHOWS:::%s' % channel_slug, timeout,
             APIClient(**settings.API_CLIENT).get_shows,
-            show_channel__slug__exact=channel_slug)
+            show_channel__slug__exact=channel_slug,
+            order_by='show__order')
     else:
         return get_cached_api_response(
-            'SHOWS', timeout, APIClient(**settings.API_CLIENT).get_shows)
+            'SHOWS', timeout, APIClient(**settings.API_CLIENT).get_shows,
+            order_by='show__order')
 
 
 def get_show(slug, timeout=60 * 5):
